@@ -159,7 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('SAVE'),
                   textColor: Theme.of(context).primaryColor,
                   onPressed: () {
-                    if (controller.text.isNotEmpty && controller.text.length > 2) {
+                    if (controller.text.isNotEmpty &&
+                        controller.text.length > 2) {
                       _delAccount(index);
                       _addAccount(Account.fromMap({
                         'id': controller.text,
