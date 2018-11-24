@@ -1,0 +1,233 @@
+import 'package:flutter/material.dart';
+
+import '../models/account.dart';
+import '../widgets/account_list.dart';
+
+class HomeScreen extends StatefulWidget {
+  final String title;
+
+  HomeScreen({Key key, this.title}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selected = -1;
+  List<Account> _accounts = List();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    _getAccounts();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: _getToolbarActions(context),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showBottomSheet(context);
+        },
+        tooltip: 'Add Account',
+        child: Icon(Icons.add),
+      ),
+      body: AccountList(
+        accounts: _accounts,
+        selected: _selected,
+        selector: select,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    AccountProvider().dispose();
+    super.dispose();
+  }
+
+  _getAccounts() {
+    AccountProvider().getAccounts().then((accounts) {
+      _accounts = accounts;
+
+      setState(() {
+        _accounts.sort((a, b) => a.id.compareTo(b.id));
+      });
+    });
+  }
+
+  _addAccount(Account account) {
+    AccountProvider().addAccount(account.toMap()).then((_) {
+      _getAccounts();
+    });
+  }
+
+  _delAccount(int index) {
+    AccountProvider().deleteAccount(_accounts[index].id).then((_) {
+      _getAccounts();
+    });
+  }
+
+  _newAccount(BuildContext context) async {
+    final result = (await Navigator.pushNamed(context, '/new')) as Account;
+
+    if (result != null) {
+      _addAccount(result);
+    }
+
+    select(-1);
+  }
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              ListTile(
+                enabled: false,
+                leading: Icon(Icons.person_add),
+                title: Text('Add a new account'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.keyboard),
+                title: Text('Enter account details'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _newAccount(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  List<Widget> _getToolbarActions(BuildContext context) {
+    return (_selected != -1)
+        ? <Widget>[
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                _promptEdit(context);
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                _promptDel(context);
+              },
+            ),
+          ]
+        : <Widget>[];
+  }
+
+  Future _promptEdit(BuildContext context) async {
+    int index = _selected;
+    Account account = _accounts[index];
+    String result = account.id;
+    select(-1);
+
+    return showDialog<Null>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+              title: new Text('Rename'),
+              content: new TextField(
+                autocorrect: false,
+                decoration: new InputDecoration(isDense: true),
+                controller: new TextEditingController(text: result),
+                onChanged: (str) {
+                  result = str;
+                },
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text('CANCEL'),
+                  textColor: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text('SAVE'),
+                  textColor: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    if (result.isNotEmpty && result.length > 2) {
+                      _delAccount(index);
+                      _addAccount(Account.fromMap(
+                          {'id': result, 'secret': account.secret}));
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ]);
+        });
+  }
+
+  Future _promptDel(BuildContext context) async {
+    int index = _selected;
+    Account account = _accounts[index];
+    select(-1);
+
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Remove ${account.id}?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'Removing this account will not remove your ability to generate codes, however it will not turn off 2-factor authentication. This may prevent you from signing into your account.')
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('REMOVE ACCOUNT'),
+              onPressed: () {
+                final snackBar = SnackBar(
+                  content: Text('${account.id} has been removed'),
+                  action: new SnackBarAction(
+                    label: 'Undo',
+                    onPressed: () {
+                      _addAccount(account);
+                    },
+                  ),
+                );
+
+                _delAccount(index);
+                _scaffoldKey.currentState.showSnackBar(snackBar);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void select(int i) {
+    setState(() {
+      _selected = i;
+    });
+  }
+}
