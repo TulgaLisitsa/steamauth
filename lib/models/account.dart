@@ -17,9 +17,7 @@ class Account {
     secret = map['secret'];
   }
 
-  Map<String, String> toMap() {
-    return {'id': id, 'secret': secret};
-  }
+  Map<String, String> toMap() => {'id': id, 'secret': secret};
 
   @override
   String toString() => id;
