@@ -134,39 +134,37 @@ class _HomeScreenState extends State<HomeScreen> {
   Future _promptEdit(BuildContext context) async {
     int index = _selected;
     Account account = _accounts[index];
-    String result = account.id;
+    TextEditingController controller = TextEditingController(text: account.id);
     select(-1);
 
     return showDialog<Null>(
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
-          return new AlertDialog(
-              title: new Text('Rename'),
-              content: new TextField(
+          return AlertDialog(
+              title: Text('Rename'),
+              content: TextField(
                 autocorrect: false,
-                decoration: new InputDecoration(isDense: true),
-                controller: new TextEditingController(text: result),
-                onChanged: (str) {
-                  result = str;
-                },
+                decoration: InputDecoration(isDense: true),
+                controller: controller,
+                onSubmitted: (str) => controller.text = str,
               ),
               actions: <Widget>[
                 new FlatButton(
-                  child: new Text('CANCEL'),
+                  child: Text('CANCEL'),
                   textColor: Theme.of(context).primaryColor,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
                 new FlatButton(
-                  child: new Text('SAVE'),
+                  child: Text('SAVE'),
                   textColor: Theme.of(context).primaryColor,
                   onPressed: () {
-                    if (result.isNotEmpty && result.length > 2) {
+                    if (controller.text.isNotEmpty && controller.text.length > 2) {
                       _delAccount(index);
-                      _addAccount(Account.fromMap(
-                          {'id': result, 'secret': account.secret}));
+                      _addAccount(Account.fromMap({
+                        'id': controller.text,
+                        'secrent': account.secret,
+                      }));
                       Navigator.of(context).pop();
                     }
                   },
