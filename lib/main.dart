@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'screens/home_screen.dart';
 import 'screens/new_account_screen.dart';
+import 'screens/settings_screen.dart';
 
 void main() => runApp(Application());
 
@@ -16,6 +17,8 @@ class Application extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/new': (BuildContext context) =>
             new NewAccountScreen(title: 'Enter account details'),
+        '/settings': (BuildContext context) =>
+            new SettingsScreen(title: 'Settings')
       },
     );
   }

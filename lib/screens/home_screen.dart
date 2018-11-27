@@ -136,17 +136,20 @@ class _HomeScreenState extends State<HomeScreen> {
         : <Widget>[_popupMenuButton()];
   }
 
-  PopupMenuButton<Choices> _popupMenuButton() => PopupMenuButton<Choices>(
-        onSelected: (Choices res) {
-          switch (res) {
+  PopupMenuButton _popupMenuButton() => PopupMenuButton(
+        onSelected: (val) {
+          switch (val) {
             case Choices.settings:
-              print('Settings');
+              Navigator.pushNamed(context, '/settings');
               break;
           }
         },
         itemBuilder: (BuildContext context) => <PopupMenuItem<Choices>>[
-              const PopupMenuItem(
-                  value: Choices.settings, child: Text('Settings'))
+              PopupMenuItem(
+                  value: Choices.settings,
+                  child: ListTile(
+                    title: Text('Settings'),
+                  )),
             ],
       );
 
