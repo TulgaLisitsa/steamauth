@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import '../models/account.dart';
 import '../widgets/account_list.dart';
 
+enum Choices {
+  settings,
+}
+
 class HomeScreen extends StatefulWidget {
   final String title;
 
@@ -127,9 +131,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 _promptDel(context);
               },
             ),
+            _popupMenuButton()
           ]
-        : <Widget>[];
+        : <Widget>[_popupMenuButton()];
   }
+
+  PopupMenuButton<Choices> _popupMenuButton() => PopupMenuButton<Choices>(
+        onSelected: (Choices res) {
+          switch (res) {
+            case Choices.settings:
+              print('Settings');
+              break;
+          }
+        },
+        itemBuilder: (BuildContext context) => <PopupMenuItem<Choices>>[
+              const PopupMenuItem(
+                  value: Choices.settings, child: Text('Settings'))
+            ],
+      );
 
   Future _promptEdit(BuildContext context) async {
     int index = _selected;

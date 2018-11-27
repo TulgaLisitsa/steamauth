@@ -16,7 +16,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Vapor"
         android:icon="@mipmap/ic_launcher"
-        android:allowBackup="false">
+        android:allowBackup="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
