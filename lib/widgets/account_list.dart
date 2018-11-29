@@ -51,16 +51,13 @@ class _AccountListState extends State<AccountList> {
 
             return Container(
               margin: EdgeInsets.only(top: 20.0),
-              decoration: BoxDecoration(
-                  color: selected
-                      ? Theme.of(context).highlightColor
-                      : Colors.white),
               child: Material(
-                color: Colors.transparent,
+                color:
+                    selected ? Theme.of(context).highlightColor : Colors.white,
                 child: ListTile(
                   selected: selected,
                   title: Padding(
-                    padding: new EdgeInsets.only(bottom: 6.0),
+                    padding: EdgeInsets.only(bottom: 6.0),
                     child: Text(item.getAuthCode(0),
                         style: Theme.of(context).primaryTextTheme.display1),
                   ),
@@ -82,7 +79,7 @@ class _AccountListState extends State<AccountList> {
                   onLongPress: () {
                     widget.selector(index);
                     Clipboard.setData(ClipboardData(text: item.getAuthCode(0)));
-                    Scaffold.of(context).showSnackBar(new SnackBar(
+                    Scaffold.of(context).showSnackBar(SnackBar(
                         content: Text("${item.id}'s code has been copied!")));
                   },
                   onTap: () {

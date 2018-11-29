@@ -47,18 +47,15 @@ ThemeData _buildTheme() {
 }
 
 TextTheme _buildTextTheme(TextTheme base) {
-  return base
-      .copyWith(
-          headline: base.headline.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
-          title:
-              base.title.copyWith(fontSize: 19.0, fontWeight: FontWeight.w600),
-          caption: base.caption.copyWith(
-              fontWeight: FontWeight.w400,
-              fontSize: 14.0,
-              color: kTextSecondaryColor),
-          display1: base.display1.copyWith(
-              fontWeight: FontWeight.w700, letterSpacing: 0.5, color: kPrimary))
-      .apply(fontFamily: 'Roboto');
+  return base.copyWith(
+      headline: base.headline.copyWith(
+        fontWeight: FontWeight.w500,
+      ),
+      title: base.title.copyWith(fontSize: 19.0, fontWeight: FontWeight.w600),
+      caption: base.caption.copyWith(
+          fontWeight: FontWeight.w400,
+          fontSize: 14.0,
+          color: kTextSecondaryColor),
+      display1: base.display1.copyWith(
+          fontWeight: FontWeight.w700, letterSpacing: 0.5, color: kPrimary));
 }

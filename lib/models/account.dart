@@ -75,14 +75,21 @@ class AccountProvider {
   }
 
   Future<List<Account>> getAccounts() async {
-    Database client = await db;
     List<Account> accounts = List();
 
-    (await client.rawQuery('SELECT * FROM Account')).forEach((map) {
+    List<Map<String, dynamic>> list = await getRawAccounts();
+
+    for (Map<String, dynamic> map in list) {
       accounts.add(Account.fromMap(map));
-    });
+    }
 
     return accounts;
+  }
+
+  Future<List<Map<String, dynamic>>> getRawAccounts() async {
+    Database client = await db;
+
+    return client.rawQuery('SELECT * FROM Account');
   }
 
   Future<int> addAccount(Map<String, String> account) async {
