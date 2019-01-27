@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:local_auth/local_auth.dart';
 
 import '../models/account.dart';
 import '../widgets/account_list.dart';
@@ -21,14 +18,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selected = -1;
-  bool _authorized = false;
   List<Account> _accounts = List();
-  final LocalAuthentication localAuth = LocalAuthentication();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
-    _auth();
     _getAccounts();
     super.initState();
   }
@@ -53,17 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             accounts: _accounts,
             selected: _selected,
             selector: select,
-          ),
-          _authorized
-              ? Container()
-              : BackdropFilter(
-                  filter: ImageFilter.blur(
-                      sigmaX: _authorized ? 0.0 : 7.5,
-                      sigmaY: _authorized ? 0.0 : 7.5),
-                  child: Container(
-                    decoration:
-                        BoxDecoration(color: Colors.grey[200].withOpacity(0.1)),
-                  ))
+          )
         ]));
   }
 
@@ -261,34 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
-  }
-
-  Future _auth() async {
-    bool canCheck = await localAuth.canCheckBiometrics;
-
-    if (canCheck) {
-      try {
-        localAuth
-            .authenticateWithBiometrics(
-                localizedReason: 'Confirm fingerprint to continue.',
-                stickyAuth: true)
-            .then((val) {
-          if (!val) {
-            _auth();
-          } else {
-            setState(() {
-              _authorized = val;
-            });
-          }
-        });
-      } on Exception catch (e) {
-        print(e);
-      }
-    } else {
-      setState(() {
-        _authorized = true;
-      });
-    }
   }
 
   void select(int i) {
