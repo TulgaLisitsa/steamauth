@@ -5,6 +5,7 @@ import '../widgets/account_list.dart';
 
 enum Choices {
   settings,
+  help
 }
 
 class HomeScreen extends StatefulWidget {
@@ -143,6 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
             case Choices.settings:
               Navigator.pushNamed(context, '/settings');
               break;
+            case Choices.help:
+              break;
           }
         },
         itemBuilder: (BuildContext context) => <PopupMenuItem<Choices>>[
@@ -150,6 +153,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   value: Choices.settings,
                   child: ListTile(
                     title: Text('Settings'),
+                  )),
+              PopupMenuItem(
+                  value: Choices.help,
+                  child: ListTile(
+                    title: Text('Help'),
                   )),
             ],
       );

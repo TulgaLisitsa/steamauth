@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:steam_auth/util/totp.dart';
 
 import '../models/account.dart';
-import '../utils/steam_totp.dart';
 import 'countdown_indicator.dart';
 
 typedef void ItemEditor(int x);
