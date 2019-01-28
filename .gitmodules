@@ -1,0 +1,3 @@
+[submodule "steam_auth"]
+	path = steam_auth
+	url = https://github.com/ogtega/steam_auth.git
