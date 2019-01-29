@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:steam_auth/util/totp.dart';
+import 'package:steam_auth/steam_auth.dart';
 
 import '../models/account.dart';
 import 'countdown_indicator.dart';
