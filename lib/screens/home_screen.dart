@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/account.dart';
 import '../widgets/account_list.dart';
 
-enum Choices {
-  settings,
-  help
-}
+enum Choices { settings, help }
 
 class HomeScreen extends StatefulWidget {
   final String title;

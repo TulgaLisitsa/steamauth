@@ -1,16 +1,11 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:crypto/crypto.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-final String _chars = '23456789BCDFGHJKMNPQRTVWXY';
-
 class Account {
   String id;
   String secret;
+  String identity;
 
   Account.fromMap(Map<String, dynamic> map) {
     id = map['id'];
@@ -21,39 +16,6 @@ class Account {
 
   @override
   String toString() => id;
-
-  String getAuthCode(int offset) {
-    String result = '';
-
-    // Convert the shared secret from a Base64 String to an int8[]
-    final Int8List key = Base64Codec().decode(secret).buffer.asInt8List();
-
-    // Initialize the SHA1 mac with the decoded secret
-    final Hmac mac = new Hmac(sha1, key);
-
-    // Create an empty byte buffer
-    ByteData byteData = ByteData.view(new Int8List(8).buffer);
-
-    // Put the current time in the empty byte buffer as a big endian int
-    byteData.setInt32(4, _time(offset) ~/ 30, Endian.big);
-
-    Int8List digest =
-        Int8List.fromList(mac.convert(byteData.buffer.asInt8List()).bytes);
-
-    int start = digest[19] & 0x0F;
-    Int8List bytes = digest.sublist(start, start + 4);
-
-    int complete = ByteData.view(bytes.buffer).getUint32(0, Endian.big) &
-        0x7fffffff &
-        -0x1;
-
-    for (int i = 0; i < 5; i++) {
-      result += (_chars[complete % _chars.length]);
-      complete ~/= _chars.length;
-    }
-
-    return result;
-  }
 }
 
 class AccountProvider {
@@ -109,5 +71,3 @@ class AccountProvider {
 
   Future dispose() async => (await db).close();
 }
-
-double _time(offset) => (DateTime.now().millisecondsSinceEpoch / 1000) + offset;

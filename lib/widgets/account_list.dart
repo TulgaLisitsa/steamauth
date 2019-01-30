@@ -58,7 +58,7 @@ class _AccountListState extends State<AccountList> {
                   selected: selected,
                   title: Padding(
                     padding: EdgeInsets.only(bottom: 6.0),
-                    child: Text(item.getAuthCode(0),
+                    child: Text(getAuthCode(item.secret, 0),
                         style: Theme.of(context).primaryTextTheme.display1),
                   ),
                   subtitle: Padding(
@@ -78,7 +78,8 @@ class _AccountListState extends State<AccountList> {
                       )),
                   onLongPress: () {
                     widget.selector(index);
-                    Clipboard.setData(ClipboardData(text: item.getAuthCode(0)));
+                    Clipboard.setData(
+                        ClipboardData(text: getAuthCode(item.secret, 0)));
                     Scaffold.of(context).showSnackBar(SnackBar(
                         content: Text("${item.id}'s code has been copied!")));
                   },
