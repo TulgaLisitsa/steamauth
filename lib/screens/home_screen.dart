@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:steam_auth/src/login.dart';
 
 import '../models/account.dart';
 import '../widgets/account_list.dart';
@@ -95,11 +96,12 @@ class _HomeScreenState extends State<HomeScreen> {
             shrinkWrap: true,
             children: <Widget>[
               ListTile(
-                enabled: false,
+                enabled: true,
                 leading: Icon(Icons.person_add),
                 title: Text('Add a new account'),
                 onTap: () {
                   Navigator.pop(context);
+                  Login().login('username', 'password');
                 },
               ),
               ListTile(
