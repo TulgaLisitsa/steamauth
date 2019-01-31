@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:steam_auth/src/login.dart';
+import 'package:steam_auth/steam_auth.dart';
 
 import '../models/account.dart';
 import '../widgets/account_list.dart';
@@ -123,13 +123,13 @@ class _HomeScreenState extends State<HomeScreen> {
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
-                _promptEdit(context);
+                _editDialog(context);
               },
             ),
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                _promptDel(context);
+                _delDialog(context);
               },
             ),
             _popupMenuButton()
@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
       );
 
-  Future _promptEdit(BuildContext context) async {
+  Future _editDialog(BuildContext context) async {
     int index = _selected;
     Account account = _accounts[index];
     TextEditingController controller = TextEditingController(text: account.id);
@@ -204,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  Future _promptDel(BuildContext context) async {
+  Future _delDialog(BuildContext context) async {
     int index = _selected;
     Account account = _accounts[index];
     select(-1);
