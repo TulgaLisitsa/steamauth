@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:steam_auth/steam_auth.dart';
 
 import '../models/account.dart';
 import '../widgets/account_list.dart';
@@ -96,12 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
             shrinkWrap: true,
             children: <Widget>[
               ListTile(
-                enabled: true,
+                enabled: false,
                 leading: Icon(Icons.person_add),
                 title: Text('Add a new account'),
                 onTap: () {
                   Navigator.pop(context);
-                  Login().login('username', 'password');
                 },
               ),
               ListTile(
@@ -138,10 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   PopupMenuButton _popupMenuButton() => PopupMenuButton(
-        onSelected: (val) {
+        onSelected: (val) async {
           switch (val) {
             case Choices.settings:
-              Navigator.pushNamed(context, '/settings');
+              await Navigator.pushNamed(context, '/settings').then((_) {
+                _getAccounts();
+              });
               break;
             case Choices.help:
               break;
@@ -194,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       _delAccount(index);
                       _addAccount(Account.fromMap({
                         'id': controller.text,
-                        'secrent': account.secret,
+                        'secret': account.secret,
                       }));
                       Navigator.of(context).pop();
                     }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -67,6 +68,21 @@ class AccountProvider {
   Future<int> deleteAccount(String id) async {
     Database client = await db;
     return await client.rawDelete('DELETE FROM Account WHERE id = ?', [id]);
+  }
+
+  Future<int> import(String text) async {
+    Database client = await db;
+    List accounts = json.decode(text);
+    String transaction = "REPLACE INTO Account (id, secret) VALUES ";
+
+    for(Map<String, dynamic> account in accounts) {
+      await client.transaction((tx) async {
+        tx.rawInsert(
+            transaction + "('${account['id']}', '${account['secret']}')");
+      });
+    }
+
+    return -1;
   }
 
   Future dispose() async => (await db).close();
