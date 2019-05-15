@@ -12,7 +12,6 @@ dependencies:
     sdk: flutter
   sqflite: ^0.12.2+1
   path_provider: ^0.4.1
-  local_auth: ^0.3.0
   path: ^1.6.2
   steam_auth:
     path: ./steam_auth
@@ -20,12 +19,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.7.0"
-
-flutter_icons:
-  ios: true
-  android: false
-  image_path: "assets/ic_launcher.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
