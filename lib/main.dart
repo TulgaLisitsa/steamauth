@@ -30,6 +30,8 @@ ThemeData _buildTheme() {
     accentColor: kPrimary,
     accentColorBrightness: Brightness.dark,
     primaryColor: kPrimary,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: kPrimary, foregroundColor: Colors.white),
     primaryColorDark: kPrimaryDark,
     primaryColorLight: kPrimaryLight,
     scaffoldBackgroundColor: kBackgroundGrey,
